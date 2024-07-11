@@ -16,7 +16,7 @@ router.get("/products", async (req, res) => {
 });
 
 // API route to fetch a single item by item ID
-router.get("/products/:id", async (req, res) => {
+router.get("/product/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const product = await prisma.findUnique({
@@ -34,7 +34,7 @@ router.get("/products/:id", async (req, res) => {
 });
 
 // API route to delete an item
-router.delete("/products/:id", async (req, res) => {
+router.delete("/product/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const product = await prisma.findUnique({
@@ -53,7 +53,7 @@ router.delete("/products/:id", async (req, res) => {
 });
 
 // API route to change a certain item
-router.patch('/products/:id', async (req, res) => {
+router.patch('/product/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const product = await prisma.product.update({
@@ -79,3 +79,5 @@ router.patch('/products/:id', async (req, res) => {
         res.status(500).json({ error: "Internal server error." })
     }
 })
+
+module.exports = router;
