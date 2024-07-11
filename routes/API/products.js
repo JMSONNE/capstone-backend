@@ -54,15 +54,28 @@ router.delete("/products/:id", async (req, res) => {
 
 // API route to change a certain item
 router.patch('/products/:id', async (req, res) => {
-    const { id } = req.params;
-    const product = await prisma.product.update({
-        where: {
-            id: parseInt(id)
-        },
-        data: {
-            name,
-            description,
-            price
+    try {
+        const { id } = req.params;
+        const product = await prisma.product.update({
+            where: {
+                id: parseInt(id)
+            },
+            data: {
+                name,
+                description,
+                price
+            }
+        })
+
+        if (!product) {
+            return res.status(404).json({ error: "Product not found." })
         }
-    })
+
+        console.log("Product succesfully modified.")
+        res.status(200).json(product)
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Internal server error." })
+    }
 })
