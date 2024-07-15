@@ -72,11 +72,12 @@ router.post('/user', async (req, res) => {
 
             }
         });
+        console.log(user)
         res.status(200).json({ message: "User created!" })
     } catch (error) {
         console.log(error)
         res.status(500).json({ error: "Internal server error." })
     }
-})
+});
 
 module.exports = router;

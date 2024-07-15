@@ -78,6 +78,25 @@ router.patch('/product/:id', async (req, res) => {
         console.log(error)
         res.status(500).json({ error: "Internal server error." })
     }
-})
+});
+
+// API to create new products
+router.post('./product', async (res, req) => {
+    const { name, description, price } = req.body
+    try {
+        const product = await prisma.product.create({
+            data: {
+                name,
+                description,
+                price
+            }
+        });
+        console.log(product)
+        res.status(200).json({ message: "Product successfully created." })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal server error.' })
+    }
+});
 
 module.exports = router;
