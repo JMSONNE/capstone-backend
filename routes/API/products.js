@@ -16,7 +16,7 @@ router.get("/products", async (req, res) => {
 });
 
 // API route to fetch a single item by item ID
-router.get("/products/:id", async (req, res) => {
+router.get("/product/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const product = await prisma.findUnique({
@@ -34,7 +34,7 @@ router.get("/products/:id", async (req, res) => {
 });
 
 // API route to delete an item
-router.delete("/products/:id", async (req, res) => {
+router.delete("/product/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const product = await prisma.findUnique({
@@ -53,16 +53,50 @@ router.delete("/products/:id", async (req, res) => {
 });
 
 // API route to change a certain item
-router.patch('/products/:id', async (req, res) => {
-    const { id } = req.params;
-    const product = await prisma.product.update({
-        where: {
-            id: parseInt(id)
-        },
-        data: {
-            name,
-            description,
-            price
+router.patch('/product/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await prisma.product.update({
+            where: {
+                id: parseInt(id)
+            },
+            data: {
+                name,
+                description,
+                price
+            }
+        })
+
+        if (!product) {
+            return res.status(404).json({ error: "Product not found." })
         }
-    })
-})
+
+        console.log("Product succesfully modified.")
+        res.status(200).json(product)
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "Internal server error." })
+    }
+});
+
+// API to create new products
+router.post('./product', async (res, req) => {
+    const { name, description, price } = req.body
+    try {
+        const product = await prisma.product.create({
+            data: {
+                name,
+                description,
+                price
+            }
+        });
+        console.log(product)
+        res.status(200).json({ message: "Product successfully created." })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: 'Internal server error.' })
+    }
+});
+
+module.exports = router;
