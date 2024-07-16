@@ -1,8 +1,8 @@
 const productRoutes = require('./routes/API/products');
-const userRoutes = require('./routes/API/users');
+const authRoutes = require('./routes/API/auth');
 
 
 module.exports = function (app) {
     app.use('/api', productRoutes);
-    app.use('/api', userRoutes);
+    app.use('/api', authRoutes);
 }
