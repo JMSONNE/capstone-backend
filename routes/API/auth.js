@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { authenticate } = require('../../middleware/authentication')
 
 // Fetches all users
 router.get('/users', async (req, res) => {
@@ -17,7 +18,7 @@ router.get('/users', async (req, res) => {
 });
 
 // Fetches a unique user by id
-router.get('/user/:id', async (req, res) => {
+router.get('/user/:id', authenticate("ADMIN"), async (req, res) => {
     try {
         const { id } = req.params;
         const user = await prisma.user.findUnique({
@@ -39,7 +40,7 @@ router.get('/user/:id', async (req, res) => {
 })
 
 // Deletes user by id
-router.delete('/user/:id', async (req, res) => {
+router.delete('/user/:id', authenticate("ADMIN"), async (req, res) => {
     try {
         const { id } = req.params;
         const user = await prisma.user.findUnique({
