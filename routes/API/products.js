@@ -81,7 +81,7 @@ router.patch('/product/:id', async (req, res) => {
 });
 
 // API to create new products
-router.post('/product', async (res, req) => {
+router.post('/product', async (req, res) => {
     const { name, description, price } = req.body
     try {
         const product = await prisma.product.create({
