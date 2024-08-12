@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../../middleware/authentication')
 
-// add product to cart
+// create a cart with an added item
 router.post('/user:id/cart', authenticate("USER", "ADMIN"), async (req, res) => {
     try {
         const { userId, user, cartItems } = req.body;
@@ -22,7 +22,7 @@ router.post('/user:id/cart', authenticate("USER", "ADMIN"), async (req, res) => 
         console.log(error)
         res.status(500).json({ error: "Internal server error." })
     }
-})
+});
 
 // Fetch the users cart
 router.get('/user:id/cart', authenticate("USER", "ADMIN"), async (req, res) => {
@@ -40,4 +40,4 @@ router.get('/user:id/cart', authenticate("USER", "ADMIN"), async (req, res) => {
         console.log(error)
         res.status(500).json({ error: "Internal server error." })
     }
-})
+});
