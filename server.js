@@ -5,11 +5,7 @@ require('dotenv').config();
 const applyRoutes = require('./routes')
 const cors = require('cors');
 
-app.use(cors({
-    origin: 'https://javascripts-coffee.vercel.app', // Replace with your Vercel app URL
-    methods: ['GET', 'POST'],
-    credentials: true,
-}));
+app.use(cors);
 
 app.use(express.json());
 
