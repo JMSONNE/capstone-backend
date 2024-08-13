@@ -12,6 +12,9 @@ require('dotenv').config();
 router.get('/users', async (req, res) => {
     try {
         const users = await prisma.user.findMany();
+        if (!users) {
+            res.status(404).json({ message: "Cannot gather users from database." })
+        }
         res.status(200).json(users)
     } catch (error) {
         console.log(error)
