@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 const express = require('express');
 const router = express.Router();
 
-const addToCart = async (req, res) => {
+router.post('/cartcreate', async (req, res) => {
     const { userId, productId, quantity } = req.body;
 
     try {
@@ -47,6 +47,6 @@ const addToCart = async (req, res) => {
         console.error('Error adding product to cart:', error);
         res.status(500).json({ error: "Failed to add product to cart" });
     }
-};
+});
 
 module.exports = router;
