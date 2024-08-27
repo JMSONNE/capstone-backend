@@ -34,7 +34,7 @@ router.post('/cartcreate', async (req, res) => {
             // If the product is already in the cart, update the quantity
             await prisma.cartItem.update({
                 where: { id: existingCartItem.id },
-                data: { quantity: existingCartItem.quantity + parseInt(quantity) },
+                data: { quantity: 1 },
             });
         } else {
             // If the product is not in the cart, add it as a new cart item
