@@ -54,4 +54,26 @@ router.post('/cartcreate', async (req, res) => {
     }
 });
 
+router.get('/user/:id/cart', async (req, res) => {
+    const userId = parseInt(req.params.id); // Capture userId from the URL
+
+    try {
+        // Fetch the user's cart based on userId
+        const cart = await prisma.cart.findUnique({
+            where: { userId: userId },
+            include: { cartItems: { include: { product: true } } }
+        });
+
+        if (!cart) {
+            return res.status(404).json({ error: "Cart not found" });
+        }
+
+        res.json(cart);
+    } catch (error) {
+        console.error('Error fetching cart:', error);
+        res.status(500).json({ error: "Failed to fetch cart" });
+    }
+});
+
+
 module.exports = router;
