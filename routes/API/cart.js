@@ -7,9 +7,14 @@ router.post('/cartcreate', async (req, res) => {
     const { userId, productId, quantity } = req.body;
 
     try {
+        // Validate input
+        if (!userId || !productId || !quantity) {
+            return res.status(400).json({ error: "Missing userId, productId, or quantity" });
+        }
+
         // Check if the user already has a cart
         let cart = await prisma.cart.findUnique({
-            where: { userId: userId },
+            where: { userId: parseInt(userId) },
             include: { cartItems: true }
         });
 
@@ -17,27 +22,27 @@ router.post('/cartcreate', async (req, res) => {
         if (!cart) {
             cart = await prisma.cart.create({
                 data: {
-                    user: { connect: { id: userId } },
+                    userId: parseInt(userId), // Ensure userId is an integer
                 },
             });
         }
 
         // Check if the product is already in the cart
-        const existingCartItem = cart.cartItems.find(item => item.productId === productId);
+        const existingCartItem = cart.cartItems.find(item => item.productId === parseInt(productId));
 
         if (existingCartItem) {
             // If the product is already in the cart, update the quantity
             await prisma.cartItem.update({
                 where: { id: existingCartItem.id },
-                data: { quantity: existingCartItem.quantity + quantity },
+                data: { quantity: existingCartItem.quantity + parseInt(quantity) },
             });
         } else {
             // If the product is not in the cart, add it as a new cart item
             await prisma.cartItem.create({
                 data: {
-                    product: { connect: { id: productId } },
-                    quantity: quantity,
-                    cart: { connect: { id: cart.id } },
+                    productId: parseInt(productId), // Ensure productId is an integer
+                    quantity: parseInt(quantity),
+                    cartId: cart.id,
                 },
             });
         }
