@@ -75,5 +75,25 @@ router.get('/user/:id/cart', async (req, res) => {
     }
 });
 
+router.delete('/user/:id/cart', async (req, res) => {
+    const userId = parseInt(req.params.id)
+
+    try {
+        const cart = await prisma.cart.delete({
+            where: { userId: userId },
+            include: { cartItems: { include: { product: true } } }
+        });
+
+        if (!cart) {
+            return res.status(404).json({ error: "Cart not found" });
+        }
+
+        res.status(201).json({ message: "cart deleted successfully." })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error: "internal server error." })
+    }
+})
+
 
 module.exports = router;
